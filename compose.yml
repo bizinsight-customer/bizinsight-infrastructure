@@ -1,0 +1,11 @@
+services:
+  reverse-proxy:
+    build: .
+    ports:
+      - "80:80"  # For HTTP to HTTPS redirection
+      - "443:443" # For HTTPS
+    volumes:
+      - ../bizinsight-frontend/dist:/usr/share/nginx/html:ro
+      - ./ssl:/etc/nginx/ssl:ro # Mount SSL certs to container
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
