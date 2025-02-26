@@ -1,0 +1,76 @@
+name: Deploy Infrastructure
+
+on:
+  repository_dispatch:
+    types: [deploy_infrastructure]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    
+    steps:
+      - name: Checkout Infrastructure Repo
+        uses: actions/checkout@v4
+
+      # Download frontend artifact from frontend repository
+      - name: Download Frontend Artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.GH_CROSS_REPO_TOKEN }}
+          workflow: build.yml
+          name: frontend-build
+          path: ./frontend/dist
+          repo: ${{ secrets.FRONTEND_REPO }}
+          check_artifacts: true
+          search_artifacts: true
+          if_no_artifact_found: fail
+
+      # Download backend artifact from backend repository
+      - name: Download Backend Docker Image Artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.GH_CROSS_REPO_TOKEN }}
+          workflow: build.yml
+          name: backend-docker-image
+          path: ./backend-image
+          repo: ${{ secrets.BACKEND_REPO }}
+          check_artifacts: true
+          search_artifacts: true
+          if_no_artifact_found: fail
+
+      # Create Firebase credentials file
+      - name: Create Firebase Service Account File
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > firebase-service-account.json
+
+      # Archive frontend build for transfer
+      - name: Archive Frontend Build
+        run: tar -czf frontend-build.tar.gz -C frontend/dist .
+
+      # Transfer files to server
+      - name: Transfer Files to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "frontend-build.tar.gz,deploy.sh,backend-image/backend-image.tar,firebase-service-account.json"
+          target: "~/"
+          strip_components: 0
+
+      # Clean install infrastructure repo and deploy
+      - name: Deploy on Remote Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            rm -rf ~/bizinsight-infrastructure
+            git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ secrets.GH_USERNAME }}/bizinsight-infrastructure.git ~/bizinsight-infrastructure
+            chmod +x ~/deploy.sh
+            ~/deploy.sh 
