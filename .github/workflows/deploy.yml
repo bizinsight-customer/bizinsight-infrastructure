@@ -23,7 +23,7 @@ jobs:
           github_token: ${{ secrets.GH_CROSS_REPO_TOKEN }}
           workflow: build.yml
           name: frontend-build
-          path: ./frontend/dist
+          path: ./dist
           repo: ${{ secrets.FRONTEND_REPO }}
           check_artifacts: true
           search_artifacts: true
@@ -35,8 +35,8 @@ jobs:
         with:
           github_token: ${{ secrets.GH_CROSS_REPO_TOKEN }}
           workflow: build.yml
-          name: backend-docker-image
-          path: ./backend-image
+          name: bizinsight-backend-image
+          path: bizinsight-backend.tar.gz
           repo: ${{ secrets.BACKEND_REPO }}
           check_artifacts: true
           search_artifacts: true
