@@ -26,7 +26,7 @@ jobs:
           github_token: ${{ secrets.GH_CROSS_REPO_TOKEN }}
           workflow: build.yml
           name: frontend-build
-          path: ./dist
+          path: ./frontend/dist
           repo: ${{ secrets.FRONTEND_REPO }}
           check_artifacts: true
           search_artifacts: true
