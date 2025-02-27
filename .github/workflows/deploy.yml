@@ -1,6 +1,9 @@
 name: Deploy Infrastructure
 
 on:
+  push:
+    branches:
+      - main
   repository_dispatch:
     types: [deploy_infrastructure]
   workflow_dispatch:  # Allow manual trigger
