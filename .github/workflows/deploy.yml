@@ -58,10 +58,10 @@ jobs:
       - name: Transfer Files to Server
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
+          host: ${{ vars.SERVER_IP }}
+          username: ${{ vars.SERVER_USER }}
           key: |
-            ${{ secrets.SSH_PRIVATE_KEY }}
+            ${{ vars.SSH_PRIVATE_KEY }}
           source: "frontend-build.tar.gz,deploy.sh,backend-image/backend-image.tar,firebase-service-account.json"
           target: "~/"
           strip_components: 0
@@ -70,9 +70,10 @@ jobs:
       - name: Deploy on Remote Server
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ vars.SERVER_IP }}
+          username: ${{ vars.SERVER_USER }}
+          key: |
+            ${{ vars.SSH_PRIVATE_KEY }}
           script: |
             rm -rf ~/bizinsight-infrastructure
             git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} ~/bizinsight-infrastructure
