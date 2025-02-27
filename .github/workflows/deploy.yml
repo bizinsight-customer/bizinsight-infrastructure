@@ -76,6 +76,6 @@ jobs:
             ${{ vars.SSH_PRIVATE_KEY }}
           script: |
             rm -rf ~/bizinsight-infrastructure
-            git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} ~/bizinsight-infrastructure
+            git clone https://${{ secrets.GH_CROSS_REPO_TOKEN }}@github.com/${{ github.repository }} ~/bizinsight-infrastructure
             chmod +x ~/deploy.sh
             ~/deploy.sh 
