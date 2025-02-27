@@ -60,7 +60,8 @@ jobs:
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: |
+            ${{ secrets.SSH_PRIVATE_KEY }}
           source: "frontend-build.tar.gz,deploy.sh,backend-image/backend-image.tar,firebase-service-account.json"
           target: "~/"
           strip_components: 0
