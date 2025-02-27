@@ -11,10 +11,10 @@ echo "🚀 Starting deployment..."
 ### BACKEND SETUP START ###
 
 # Load backend Docker image
-if [ -f ~/bizinsight-backend.tar.gz ]; then
+if [ -f ~/bizinsight-backend.tar.gz/bizinsight-backend.tar.gz ]; then
     echo "🐳 Loading backend Docker image..."
-    docker load < ~/bizinsight-backend.tar.gz
-    rm -f ~/bizinsight-backend.tar.gz
+    docker load < ~/bizinsight-backend.tar.gz/bizinsight-backend.tar.gz
+    rm -rf ~/bizinsight-backend.tar.gz
     echo "✅ Backend image loaded successfully"
 else
     echo "⚠️ Backend Docker image not found!"
