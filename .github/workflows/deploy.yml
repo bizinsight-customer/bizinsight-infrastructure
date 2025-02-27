@@ -62,7 +62,7 @@ jobs:
           username: ${{ vars.SERVER_USER }}
           key: |
             ${{ vars.SSH_PRIVATE_KEY }}
-          source: "frontend-build.tar.gz,deploy.sh,backend-image/backend-image.tar,firebase-service-account.json"
+          source: "frontend-build.tar.gz,bizinsight-backend.tar.gz,firebase-service-account.json"
           target: "~/"
           strip_components: 0
 
@@ -76,6 +76,11 @@ jobs:
             ${{ vars.SSH_PRIVATE_KEY }}
           script: |
             rm -rf ~/bizinsight-infrastructure
+            rm -rf ~/bizinsight-backend
+            rm -rf ~/bizinsight-frontend
             git clone https://${{ secrets.GH_CROSS_REPO_TOKEN }}@github.com/${{ github.repository }} ~/bizinsight-infrastructure
-            chmod +x ~/deploy.sh
-            ~/deploy.sh 
+            git clone https://${{ secrets.GH_CROSS_REPO_TOKEN }}@github.com/${{ github.repository }} ~/bizinsight-backend
+            mkdir -p ~/bizinsight-frontend
+            cd ~/bizinsight-infrastructure
+            chmod +x deploy.sh
+            ./deploy.sh 

@@ -23,12 +23,9 @@ services:
 
   backend:
     extends:
-      file: ./bizinsight-backend/compose.yml
+      file: ../bizinsight-backend/compose.yml
       service: backend
-    image: bizinsight-backend:latest  # Override the build with our pre-built image
-    volumes:
-      - ./bizinsight-backend/uploads:/app/uploads
-      - ./bizinsight-backend/config/firebase-service-account.json:/app/config/firebase-service-account.json:ro
+    image: bizinsight-backend:latest
 
 networks:
   default:
