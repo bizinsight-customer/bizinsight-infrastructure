@@ -6,6 +6,17 @@ INFRASTRUCTURE_DIR=~/bizinsight-infrastructure
 FRONTEND_DIR=~/bizinsight-frontend
 BACKEND_DIR=~/bizinsight-backend
 
+# Check required environment variables at the start
+if [ -z "${OPENAI_API_KEY}" ]; then
+    echo "⚠️ OPENAI_API_KEY is not set!"
+    exit 1
+fi
+
+if [ -z "${JWT_SECRET_KEY}" ]; then
+    echo "⚠️ JWT_SECRET_KEY is not set!"
+    exit 1
+fi
+
 echo "🚀 Starting deployment..."
 
 ### DOCKER SETUP START ###
@@ -91,20 +102,12 @@ fi
 
 ### FRONTEND SETUP END ###
 
-# Check required environment variables
-if [ -z "$OPENAI_API_KEY" ]; then
-    echo "⚠️ OPENAI_API_KEY is not set!"
-    exit 1
-fi
-
-if [ -z "$JWT_SECRET_KEY" ]; then
-    echo "⚠️ JWT_SECRET_KEY is not set!"
-    exit 1
-fi
-
-# Export environment variables for Docker Compose
-export OPENAI_API_KEY
-export JWT_SECRET_KEY
+# Create .env file for Docker Compose
+echo "Creating .env file for Docker Compose..."
+cat > $INFRASTRUCTURE_DIR/.env << EOL
+OPENAI_API_KEY=${OPENAI_API_KEY}
+JWT_SECRET_KEY=${JWT_SECRET_KEY}
+EOL
 
 # Restart services with Docker Compose
 echo "🔄 Restarting services with Docker Compose..."

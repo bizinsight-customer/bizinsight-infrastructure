@@ -69,14 +69,15 @@ jobs:
       # Clean install infrastructure repo and deploy
       - name: Deploy on Remote Server
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         with:
           host: ${{ vars.SERVER_IP }}
           username: ${{ vars.SERVER_USER }}
           key: |
             ${{ vars.SSH_PRIVATE_KEY }}
-          envs: |
-            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-            JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
+          envs: OPENAI_API_KEY,JWT_SECRET_KEY
           script: |
             rm -rf ~/bizinsight-infrastructure
             rm -rf ~/bizinsight-backend
@@ -86,6 +87,4 @@ jobs:
             mkdir -p ~/bizinsight-frontend
             cd ~/bizinsight-infrastructure
             chmod +x deploy.sh
-            export OPENAI_API_KEY="$OPENAI_API_KEY"
-            export JWT_SECRET_KEY="$JWT_SECRET_KEY"
-            ./deploy.sh 
+            OPENAI_API_KEY="${OPENAI_API_KEY}" JWT_SECRET_KEY="${JWT_SECRET_KEY}" ./deploy.sh 
