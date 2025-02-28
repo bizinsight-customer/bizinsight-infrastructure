@@ -78,7 +78,6 @@ fi
 
 ### FRONTEND SETUP START ###
 
-
 if [ -f ~/frontend-build.tar.gz ]; then
     echo "📦 Extracting frontend build..."
     mkdir -p $FRONTEND_DIR/dist
@@ -91,6 +90,21 @@ else
 fi
 
 ### FRONTEND SETUP END ###
+
+# Check required environment variables
+if [ -z "$OPENAI_API_KEY" ]; then
+    echo "⚠️ OPENAI_API_KEY is not set!"
+    exit 1
+fi
+
+if [ -z "$JWT_SECRET_KEY" ]; then
+    echo "⚠️ JWT_SECRET_KEY is not set!"
+    exit 1
+fi
+
+# Export environment variables for Docker Compose
+export OPENAI_API_KEY
+export JWT_SECRET_KEY
 
 # Restart services with Docker Compose
 echo "🔄 Restarting services with Docker Compose..."

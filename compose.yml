@@ -22,10 +22,25 @@ services:
       retries: 3
 
   backend:
-    extends:
-      file: ../bizinsight-backend/compose.yml
-      service: backend
     image: bizinsight-backend:latest
+    container_name: bizinsight-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../bizinsight-backend/uploads:/app/uploads
+      - ../bizinsight-backend/config/firebase-service-account.json:/app/config/firebase-service-account.json:ro
+    environment:
+      - DATABASE_URL=sqlite:///app/bizinsight.db
+      - FIREBASE_SERVICE_ACCOUNT_PATH=/app/config/firebase-service-account.json
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 networks:
   default:
