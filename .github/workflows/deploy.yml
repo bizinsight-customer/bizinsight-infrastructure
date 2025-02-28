@@ -62,7 +62,7 @@ jobs:
           username: ${{ vars.SERVER_USER }}
           key: |
             ${{ vars.SSH_PRIVATE_KEY }}
-          source: "frontend-build.tar.gz,bizinsight-backend.tar.gz,bizinsight-backend/config/firebase-service-account.json"
+          source: "frontend-build.tar.gz,bizinsight-backend.tar.gz,firebase-service-account.json"
           target: "~/"
           strip_components: 0
 
