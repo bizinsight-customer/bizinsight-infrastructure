@@ -25,7 +25,6 @@ echo "🐳 Setting up Docker..."
 # Install required system packages
 echo "📦 Installing required system packages..."
 sudo apt-get update
-sudo apt-get install -y poppler-utils
 
 # Install Docker if not present
 if ! command -v docker &> /dev/null; then
