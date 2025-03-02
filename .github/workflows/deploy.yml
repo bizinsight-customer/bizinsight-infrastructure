@@ -89,4 +89,10 @@ jobs:
             mkdir -p ~/bizinsight-frontend
             cd ~/bizinsight-infrastructure
             chmod +x deploy.sh
-            OPENAI_API_KEY="${OPENAI_API_KEY}" JWT_SECRET_KEY="${JWT_SECRET_KEY}" POSTGRES_USER="${POSTGRES_USER}" POSTGRES_PASSWORD="${POSTGRES_PASSWORD}" ./deploy.sh 
+            echo "POSTGRES_USER=${POSTGRES_USER}"
+            echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+            OPENAI_API_KEY="${OPENAI_API_KEY}" \
+            JWT_SECRET_KEY="${JWT_SECRET_KEY}" \
+            POSTGRES_USER="${POSTGRES_USER}" \
+            POSTGRES_PASSWORD="${POSTGRES_PASSWORD}" \
+            ./deploy.sh 

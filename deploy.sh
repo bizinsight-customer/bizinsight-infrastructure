@@ -111,8 +111,8 @@ echo "Creating .env file for Docker Compose..."
 cat > $INFRASTRUCTURE_DIR/.env << EOL
 OPENAI_API_KEY=${OPENAI_API_KEY}
 JWT_SECRET_KEY=${JWT_SECRET_KEY}
-POSTGRES_USER=${POSTGRES_USER:-bizinsight}
-POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-bizinsight_password}
+POSTGRES_USER=${POSTGRES_USER}
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 EOL
 
 # Check if all required environment variables are set in the .env file
