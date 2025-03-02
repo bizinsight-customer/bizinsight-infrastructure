@@ -21,6 +21,22 @@ services:
       timeout: 10s
       retries: 3
 
+  postgres:
+    image: postgres:16
+    container_name: bizinsight-postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=bizinsight
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   backend:
     image: bizinsight-backend:latest
     container_name: bizinsight-backend
@@ -31,16 +47,22 @@ services:
       - ../bizinsight-backend/uploads:/app/uploads
       - ../bizinsight-backend/config/firebase-service-account.json:/app/config/firebase-service-account.json:ro
     environment:
-      - DATABASE_URL=sqlite:///app/bizinsight.db
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/bizinsight
       - FIREBASE_SERVICE_ACCOUNT_PATH=/app/config/firebase-service-account.json
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+
+volumes:
+  postgres_data:
 
 networks:
   default:

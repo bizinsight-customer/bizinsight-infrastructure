@@ -72,6 +72,8 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         with:
           host: ${{ vars.SERVER_IP }}
           username: ${{ vars.SERVER_USER }}
@@ -87,4 +89,4 @@ jobs:
             mkdir -p ~/bizinsight-frontend
             cd ~/bizinsight-infrastructure
             chmod +x deploy.sh
-            OPENAI_API_KEY="${OPENAI_API_KEY}" JWT_SECRET_KEY="${JWT_SECRET_KEY}" ./deploy.sh 
+            OPENAI_API_KEY="${OPENAI_API_KEY}" JWT_SECRET_KEY="${JWT_SECRET_KEY}" POSTGRES_USER="${POSTGRES_USER}" POSTGRES_PASSWORD="${POSTGRES_PASSWORD}" ./deploy.sh 
