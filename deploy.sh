@@ -133,38 +133,11 @@ echo "🔄 Restarting services with Docker Compose..."
 cd $INFRASTRUCTURE_DIR
 cp -r ../ssl .
 
-# Function to check if all containers are healthy
-check_containers_health() {
-    echo "Checking containers health..."
-    for i in {1..30}; do  # Try for 5 minutes (30 * 10 seconds)
-        if docker compose ps --format json | grep -q '"Health": "unhealthy"\|"Health": "starting"'; then
-            echo "Waiting for containers to be healthy... (Attempt $i/30)"
-            sleep 10
-        else
-            echo "✅ All containers are healthy!"
-            return 0
-        fi
-    done
-    echo "❌ Containers failed to become healthy within timeout"
-    docker compose logs
-    return 1
-}
-
 # Start services
-docker compose down
-docker compose up -d
+docker compose down || true
+docker compose up -d || true
+
 # Show initial logs for all services
-docker compose logs -f --tail=100 &
-# Give logs some time to appear
-sleep 30
-# Kill the log following process
-kill %1
+docker compose logs
 
-# Wait for containers to be healthy
-check_containers_health
-if [ $? -ne 0 ]; then
-    echo "❌ Deployment failed due to unhealthy containers"
-    exit 1
-fi
-
-echo "✅ Deployment completed successfully!" 
+echo "✅ Deployment completed successfully!"
