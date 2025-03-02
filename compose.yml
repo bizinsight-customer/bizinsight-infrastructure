@@ -47,7 +47,7 @@ services:
       - ../bizinsight-backend/uploads:/app/uploads
       - ../bizinsight-backend/config/firebase-service-account.json:/app/config/firebase-service-account.json:ro
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/fake-db-for-testing
       - FIREBASE_SERVICE_ACCOUNT_PATH=/app/config/firebase-service-account.json
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
