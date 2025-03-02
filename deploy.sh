@@ -125,12 +125,8 @@ OPENAI_API_KEY=${OPENAI_API_KEY}
 JWT_SECRET_KEY=${JWT_SECRET_KEY}
 POSTGRES_USER=${POSTGRES_USER}
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+POSTGRES_DB=${POSTGRES_DB}
 EOL
-
-# Check if all required environment variables are set in the .env file
-if ! grep -q "POSTGRES_USER" $INFRASTRUCTURE_DIR/.env || ! grep -q "POSTGRES_PASSWORD" $INFRASTRUCTURE_DIR/.env; then
-    echo "⚠️ Warning: POSTGRES_USER and/or POSTGRES_PASSWORD not set. Using default values."
-fi
 
 # Restart services with Docker Compose
 echo "🔄 Restarting services with Docker Compose..."
