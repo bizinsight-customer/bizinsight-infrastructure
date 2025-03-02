@@ -153,6 +153,12 @@ check_containers_health() {
 # Start services
 docker compose down
 docker compose up -d
+# Show initial logs for all services
+docker compose logs -f --tail=100 &
+# Give logs some time to appear
+sleep 30
+# Kill the log following process
+kill %1
 
 # Wait for containers to be healthy
 check_containers_health
