@@ -135,9 +135,16 @@ cp -r ../ssl .
 
 # Start services
 docker compose down || true
-docker compose up -d || true
+docker compose up -d
+COMPOSE_EXIT_CODE=$?
 
 # Show initial logs for all services
 docker compose logs
+
+# Check if docker compose up failed
+if [ $COMPOSE_EXIT_CODE -ne 0 ]; then
+    echo "❌ Docker Compose failed with exit code $COMPOSE_EXIT_CODE"
+    exit $COMPOSE_EXIT_CODE
+fi
 
 echo "✅ Deployment completed successfully!"
