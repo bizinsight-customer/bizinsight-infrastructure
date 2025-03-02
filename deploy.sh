@@ -6,6 +6,13 @@ INFRASTRUCTURE_DIR=~/bizinsight-infrastructure
 FRONTEND_DIR=~/bizinsight-frontend
 BACKEND_DIR=~/bizinsight-backend
 
+# Validate directory setup
+echo "🔍 Validating directory setup..."
+if [ "$INFRASTRUCTURE_DIR" = "$BACKEND_DIR" ]; then
+    echo "⚠️ Infrastructure and backend directories cannot be the same!"
+    exit 1
+fi
+
 # Check required environment variables at the start
 if [ -z "${OPENAI_API_KEY}" ]; then
     echo "⚠️ OPENAI_API_KEY is not set!"
@@ -83,7 +90,12 @@ mkdir -p $BACKEND_DIR/uploads
 # Copy Firebase credentials
 if [ -f ~/firebase-service-account.json ]; then
     echo "🔑 Installing Firebase credentials..."
-    mv ~/firebase-service-account.json $BACKEND_DIR/config/
+    # Remove existing directory or file if it exists
+    rm -rf $BACKEND_DIR/config/firebase-service-account.json
+    # Copy the file
+    cp ~/firebase-service-account.json $BACKEND_DIR/config/
+    echo "✅ Firebase credentials installed successfully"
+    rm -f ~/firebase-service-account.json
 else
     echo "⚠️ Firebase credentials not found!"
     exit 1
